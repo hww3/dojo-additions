@@ -14,7 +14,7 @@ dojo.requireLocalization("ozo", "timeago");
 dojo.declare("ozo.timeago", null, {
 
     settings: null,
-    _data: {},
+//    _data: {},
 
     _counter: 0, // you should only access this via the objects prototype
 
@@ -22,7 +22,7 @@ dojo.declare("ozo.timeago", null, {
         this._query = query;
         
         this.settings = {
-            refreshMillis: 60000,
+            refreshMillis: 10000,
             allowFuture: false,
         };
         
@@ -40,6 +40,7 @@ dojo.declare("ozo.timeago", null, {
     },
     
     _refresh: function() {
+//console.log("refresh " + this._query);
         var dh = dojo.hitch;
         dojo.query(this._query).forEach(dh(this, function(node) {
             var id = dojo.attr(node, 'id');
@@ -47,19 +48,22 @@ dojo.declare("ozo.timeago", null, {
                 id = 'timeago_'+ozo.timeago.prototype._counter;
                 dojo.attr(node, 'id', id);
             }
+var datetime;
+//            if(!this._data[id]) {
+//                ozo.timeago.prototype._counter++;
+//                this._data[id] = { 'datetime': this._getDatetime(node) };
+		datetime = this._getDatetime(node);
+//console.log("looking at	" + datetime);
 
-            if(!this._data[id]) {
-                ozo.timeago.prototype._counter++;
-                this._data[id] = { 'datetime': this._getDatetime(node) };
                 var text = dojo.trim(node.innerHTML); // TODO: Deal with inner nodes here
-                if(text.length > 0) { 
-                    dojo.attr(node, "title", text); 
-                }
-            }
+//                if(text.length > 0) { 
+//                    dojo.attr(node, "title", text); 
+//                }
+//            }
             
-            var data = this._data[id];
-            if(!isNaN(data.datetime)) {
-                node.innerHTML = this._inWords(data.datetime);
+//            var data = this._data[id];
+            if(!isNaN(/*data.*/datetime)) {
+                node.innerHTML = this._inWords(/*data.*/datetime);
             }
         }));
     },
@@ -67,6 +71,7 @@ dojo.declare("ozo.timeago", null, {
     _getDatetime: function(/* element */ node) {
         var isTimeNode = node.tagName.toLowerCase() === 'time';
         var iso8601 = isTimeNode ? dojo.attr(node, "datetime") : dojo.attr(node, "title");
+//console.log("looking at time stamp " + iso8601);
         return this._parse(iso8601);
     },
     
@@ -103,7 +108,7 @@ dojo.declare("ozo.timeago", null, {
             return s.replace(/%d/i, value);
         }
         
-        var words = seconds < 14 && substitute(txt.now, Math.round(seconds)) ||
+        var words = (seconds < 14 && substitute(txt.now, Math.round(seconds))) ||
 	    seconds < 45 && substitute(txt.seconds, Math.round(seconds)) ||
             seconds < 90 && substitute(txt.minute, 1) ||
             minutes < 45 && substitute(txt.minutes, Math.round(minutes)) ||
@@ -115,6 +120,7 @@ dojo.declare("ozo.timeago", null, {
             days < 365 && substitute(txt.months, Math.floor(days / 30)) ||
             years < 2 && substitute(txt.year, 1) ||
             substitute(txt.years, Math.floor(years));
+//console.log("converting " + seconds + " / "  + date + " to " + dojo.trim([prefix, words, suffix].join(" ")));
 
       return dojo.trim([prefix, words, suffix].join(" "));
     },
