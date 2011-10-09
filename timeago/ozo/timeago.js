@@ -103,7 +103,8 @@ dojo.declare("ozo.timeago", null, {
             return s.replace(/%d/i, value);
         }
         
-        var words = seconds < 45 && substitute(txt.seconds, Math.round(seconds)) ||
+        var words = seconds < 14 && substitute(txt.now, Math.round(seconds)) ||
+	    seconds < 45 && substitute(txt.seconds, Math.round(seconds)) ||
             seconds < 90 && substitute(txt.minute, 1) ||
             minutes < 45 && substitute(txt.minutes, Math.round(minutes)) ||
             minutes < 90 && substitute(txt.hour, 1) ||
