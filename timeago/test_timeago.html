@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Test Timeago</title>
+		
+		<script type="text/javascript" src="dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>
+		
+		<script type="text/javascript">
+			dojo.registerModulePath("ozo","/ozo");
+			dojo.require("ozo.timeago");	
+            
+            // Helpers for the demo page
+            var zeropad = function (num) {
+                return ((num < 10) ? '0' : '') + num;
+            };
+
+            var iso8601 = function (date) {
+                return date.getUTCFullYear()
+                + "-" + zeropad(date.getUTCMonth()+1)
+                + "-" + zeropad(date.getUTCDate())
+                + "T" + zeropad(date.getUTCHours())
+                + ":" + zeropad(date.getUTCMinutes())
+                + ":" + zeropad(date.getUTCSeconds()) + "Z";
+            };
+            
+            // Kickstart the fun
+			dojo.addOnLoad(function() {
+                dojo.attr(dojo.query('abbr.loaded')[0], 'title', iso8601(new Date()));
+                new ozo.timeago('abbr.timeago');
+                new ozo.timeago('abbr.secondTimeago');
+			});
+		</script>
+		
+	</head>
+	<body>
+        <p class="example"> 
+            You joined this page <abbr class="timeago loaded" title=""></abbr>.
+        </p>
+        <p class="example"> 
+            mrtom was born <abbr class="timeago" title="1982-03-07T06:00:00Z">March 07, 1982</abbr>.
+        </p>
+        
+        <p class="example">
+            Man first landed on the moon <abbr class="secondTimeago" title="1969-07-21T00:00:00Z"21st July, 1969</abbr>
+        </p>
+	</body>
+</html>
